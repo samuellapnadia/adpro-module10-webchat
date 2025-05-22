@@ -27,13 +27,31 @@ pub fn login() -> Html {
     };
 
     html! {
-       <div class="bg-gray-800 flex w-screen">
-            <div class="container mx-auto flex flex-col justify-center items-center">
-                <form class="m-4 flex">
-                    <input {oninput} class="rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white" placeholder="Username" />
-                    <Link<Route> to={Route::Chat}> <button {onclick} disabled={username.len()<1} class="px-8 rounded-r-lg bg-violet-600	  text-white font-bold p-4 uppercase border-violet-600 border-t border-b border-r" >{"Go Chatting!"}</button></Link<Route>>
+        <div
+            class="w-screen h-screen bg-pink-100 flex items-center justify-center"
+        >
+            <div class="bg-white bg-opacity-90 p-8 rounded-2xl shadow-lg text-center max-w-sm w-full">
+                <h1 class="text-pink-600 text-2xl font-extrabold mb-2">{"Welcome to YewChat 💌"}</h1>
+                <p class="text-pink-400 text-sm mb-6">{"Type your username to start chatting!"}</p>
+                <form class="space-y-4">
+                    <input
+                        {oninput}
+                        class="w-full p-3 rounded-full border-2 border-pink-300 placeholder-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-400"
+                        placeholder="Your username..."
+                    />
+                    <Link<Route> to={Route::Chat}>
+                        <button
+                            {onclick}
+                            disabled={username.len() < 1}
+                            class="w-full bg-pink-400 hover:bg-pink-500 text-white font-semibold py-2 rounded-full shadow-md transition disabled:bg-pink-200"
+                        >
+                            {"💬 Start Chatting!"}
+                        </button>
+                    </Link<Route>>
                 </form>
             </div>
         </div>
     }
+    
+    
 }

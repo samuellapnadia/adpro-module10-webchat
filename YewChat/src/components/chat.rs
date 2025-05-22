@@ -137,49 +137,47 @@ impl Component for Chat {
 
     fn view(&self, ctx: &Context<Self>) -> Html {
         let submit = ctx.link().callback(|_| Msg::SubmitMessage);
-
+    
         html! {
-            <div class="flex w-screen">
-                <div class="flex-none w-56 h-screen bg-gray-100">
-                    <div class="text-xl p-3">{"Users"}</div>
+            <div class="flex w-screen font-sans text-gray-800">
+                <div class="flex-none w-60 h-screen bg-pink-50 shadow-inner overflow-auto">
+                    <div class="text-xl font-bold p-4 text-pink-600">{"💖 Online Users"}</div>
                     {
-                        self.users.clone().iter().map(|u| {
-                            html!{
-                                <div class="flex m-3 bg-white rounded-lg p-2">
-                                    <div>
-                                        <img class="w-12 h-12 rounded-full" src={u.avatar.clone()} alt="avatar"/>
-                                    </div>
-                                    <div class="flex-grow p-3">
-                                        <div class="flex text-xs justify-between">
-                                            <div>{u.name.clone()}</div>
-                                        </div>
-                                        <div class="text-xs text-gray-400">
-                                            {"Hi there!"}
-                                        </div>
+                        self.users.iter().map(|u| {
+                            html! {
+                                <div class="flex items-center m-2 bg-white rounded-lg px-3 py-2 hover:bg-pink-100 transition">
+                                    <img class="w-10 h-10 rounded-full border border-pink-300" src={u.avatar.clone()} alt="avatar" />
+                                    <div class="ml-3">
+                                        <div class="font-medium text-sm">{ &u.name }</div>
+                                        <div class="text-xs text-pink-400">{"🟢 Online"}</div>
                                     </div>
                                 </div>
                             }
                         }).collect::<Html>()
                     }
                 </div>
-                <div class="grow h-screen flex flex-col">
-                    <div class="w-full h-14 border-b-2 border-gray-300"><div class="text-xl p-3">{"💬 Chat!"}</div></div>
-                    <div class="w-full grow overflow-auto border-b-2 border-gray-300">
+    
+                <div class="grow h-screen flex flex-col bg-white">
+                    <div class="h-16 bg-white border-b shadow flex items-center px-4 text-xl font-bold text-pink-600">
+                        {"💬 Hi! Welcome to YewChat!"}
+                    </div>
+    
+                    <div class="flex-grow overflow-y-auto px-6 py-4 space-y-3 bg-pink-50">
                         {
                             self.messages.iter().map(|m| {
                                 let user = self.users.iter().find(|u| u.name == m.from).unwrap();
-                                html!{
-                                    <div class="flex items-end w-3/6 bg-gray-100 m-8 rounded-tl-lg rounded-tr-lg rounded-br-lg ">
-                                        <img class="w-8 h-8 rounded-full m-3" src={user.avatar.clone()} alt="avatar"/>
-                                        <div class="p-3">
-                                            <div class="text-sm">
-                                                {m.from.clone()}
-                                            </div>
-                                            <div class="text-xs text-gray-500">
-                                                if m.message.ends_with(".gif") {
-                                                    <img class="mt-3" src={m.message.clone()}/>
-                                                } else {
-                                                    {m.message.clone()}
+                                html! {
+                                    <div class="flex items-start gap-3">
+                                        <img class="w-9 h-9 rounded-full border border-pink-300" src={user.avatar.clone()} />
+                                        <div class="bg-white p-3 rounded-xl shadow max-w-xl">
+                                            <div class="text-sm font-semibold text-pink-600">{ &m.from }</div>
+                                            <div class="text-sm mt-1 text-gray-700">
+                                                {
+                                                    if m.message.ends_with(".gif") {
+                                                        html! { <img src={m.message.clone()} class="rounded mt-2 max-w-xs" /> }
+                                                    } else {
+                                                        html! { <span>{ &m.message }</span> }
+                                                    }
                                                 }
                                             </div>
                                         </div>
@@ -187,13 +185,20 @@ impl Component for Chat {
                                 }
                             }).collect::<Html>()
                         }
-
                     </div>
-                    <div class="w-full h-14 flex px-3 items-center">
-                        <input ref={self.chat_input.clone()} type="text" placeholder="Message" class="block w-full py-2 pl-4 mx-3 bg-gray-100 rounded-full outline-none focus:text-gray-700" name="message" required=true />
-                        <button onclick={submit} class="p-3 shadow-sm bg-blue-600 w-10 h-10 rounded-full flex justify-center items-center color-white">
-                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="fill-white">
-                                <path d="M0 0h24v24H0z" fill="none"></path><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path>
+    
+                    <div class="h-20 bg-white border-t flex items-center px-4 gap-3 shadow-inner">
+                        <input
+                            ref={self.chat_input.clone()}
+                            type="text"
+                            placeholder="Type a message 💌"
+                            class="flex-grow py-2 px-4 bg-pink-100 rounded-full outline-none focus:ring-2 focus:ring-pink-400"
+                            required=true
+                        />
+                        <button onclick={submit} class="bg-pink-500 hover:bg-pink-600 text-white rounded-full w-12 h-12 flex items-center justify-center shadow-md transition">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 fill-current">
+                                <path d="M0 0h24v24H0z" fill="none"/>
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                             </svg>
                         </button>
                     </div>
@@ -201,4 +206,6 @@ impl Component for Chat {
             </div>
         }
     }
+    
+    
 }
